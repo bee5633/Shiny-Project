@@ -56,3 +56,7 @@ border2
 
 #cleaned dataset
 view(border2)
+
+#export the data
+write.csv(border2, file="border2.csv", row.names=FALSE)
+
