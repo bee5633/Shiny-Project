@@ -4,6 +4,11 @@
 #Load the library
 library(tidyverse)
 library(ggmap)
+library(tmap)
+library(leaflet)
+library(mapview)
+library(sf)
+library(spData)
 
 #load the data
 border = read.csv("./Border_Crossing_Entry_Data.csv")
@@ -59,4 +64,58 @@ view(border2)
 
 #export the data
 write.csv(border2, file="border2.csv", row.names=FALSE)
+
+#get rid of some columns that we don't need
+borderF = border2 %>% 
+  select(Border,Port.Name,Port.Code,State,Measure,Value,Month,Year,Longitude,Latitude)
+
+view(borderF)
+
+#export the final data
+write.csv(borderF, file="borderF.csv", row.names=FALSE)
+
+#exploratory data analysis ####
+#1. Total number of border 
+view(borderF)
+length(unique(borderF$Port.Name))
+
+#2. Number of border by Border
+borderF %>% 
+  group_by(Border) %>% 
+  summarise(n_distinct(Port.Name))
+
+#3. By year and Border and measure. How many passings
+border3=borderF %>% 
+  group_by(Border, Year) %>% 
+  summarise(total_3 = sum(Value))
+view(border3)
+colnames(border3)
+ggplot(data=border3, aes(Year, total_3)) + geom_col(aes(fill=border3$Border), position='dodge')
+
+#4. By month and Border and measure. How many passings. 
+border4 = borderF %>% 
+  group_by(Border, Month) %>% 
+  summarise(sum(Value))
+view(border4)
+ggplot(data=border4, aes(border4$Month, border4$`sum(Value)`)) + geom_col(aes(fill=border4$Border), position='dodge')
+
+#5. By state. How many passings.
+border5 = borderF %>% 
+  group_by(State) %>% 
+  summarise(sumV = sum(as.numeric(Value))) %>% 
+  arrange(desc(sumV)) %>% 
+  top_n(5,sumV)
+view(border5)
+ggplot(data=border5, aes(border5$State, border5$sumV)) + geom_col(aes())
+
+#6. by measure and border. -> what type of coming in 
+border6 = borderF %>% 
+  group_by(Measure, Border) %>% 
+  summarise(sumV = sum(as.numeric(Value))) %>% 
+  arrange(desc(sumV))
+view(border6)
+
+#7. map 
+
+
 
