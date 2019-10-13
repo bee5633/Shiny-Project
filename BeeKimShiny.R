@@ -67,7 +67,8 @@ write.csv(border2, file="border2.csv", row.names=FALSE)
 
 #get rid of some columns that we don't need
 borderF = border2 %>% 
-  select(Border,Port.Name,Port.Code,State,Measure,Value,Month,Year,Longitude,Latitude)
+  select(Border,Port.Name,Port.Code,State,Measure,Value,Month,Year,Longitude,Latitude) %>% 
+  filter(Year<2019)
 
 view(borderF)
 
@@ -75,16 +76,25 @@ view(borderF)
 write.csv(borderF, file="borderF.csv", row.names=FALSE)
 
 #exploratory data analysis ####
-#1. Total number of border 
+#1. Total number of border ####
 view(borderF)
 length(unique(borderF$Port.Name))
 
-#2. Number of border by Border
+#2. Number of border by Border ####
 borderF %>% 
   group_by(Border) %>% 
-  summarise(n_distinct(Port.Name))
+  summarise(NumberPort = n_distinct(Port.Name)) %>% 
+  ggplot(aes(Border, NumberPort)) + geom_col()
 
-#3. By year and Border and measure. How many passings
+borderF %>% filter(Border=="Canada")
+
+sum(borderF %>% filter(Border =="Canada") %>%  summarise(n_distinct(Port.Name)))
+
+borderCanada = borderF %>% filter(Border =="Canada")
+
+
+
+#3. By Year and Border. How many passings ####
 border3=borderF %>% 
   group_by(Border, Year) %>% 
   summarise(total_3 = sum(Value))
@@ -92,30 +102,77 @@ view(border3)
 colnames(border3)
 ggplot(data=border3, aes(Year, total_3)) + geom_col(aes(fill=border3$Border), position='dodge')
 
-#4. By month and Border and measure. How many passings. 
+
+#4. By month and Border. How many passings. ####
 border4 = borderF %>% 
   group_by(Border, Month) %>% 
   summarise(sum(Value))
 view(border4)
 ggplot(data=border4, aes(border4$Month, border4$`sum(Value)`)) + geom_col(aes(fill=border4$Border), position='dodge')
 
-#5. By state. How many passings.
+#5. By state. How many passings. ####
 border5 = borderF %>% 
   group_by(State) %>% 
   summarise(sumV = sum(as.numeric(Value))) %>% 
-  arrange(desc(sumV)) %>% 
-  top_n(5,sumV)
+  arrange(desc(sumV)) 
 view(border5)
 ggplot(data=border5, aes(border5$State, border5$sumV)) + geom_col(aes())
 
-#6. by measure and border. -> what type of coming in 
+#6. by measure and border. -> what type of coming in ####
 border6 = borderF %>% 
   group_by(Measure, Border) %>% 
   summarise(sumV = sum(as.numeric(Value))) %>% 
   arrange(desc(sumV))
 view(border6)
 
-#7. map 
 
 
+ CanadaIncoming = borderF %>% 
+   filter(Border == "Canada") %>% 
+   summarise(sum(as.numeric(Value)))
+ CanadaIncoming
+    
+ MexicoIncoming = borderF %>% 
+   filter(Border == "Mexico") %>% 
+   summarise(sum(as.numeric(Value)))
+ MexicoIncoming
+ 
+ 
+ #7. map ####
+
+borderPortLongLat = borderF %>% 
+  select(Port.Name,Longitude,Latitude) %>% 
+  group_by(Port.Name) %>% 
+  mutate(Longitude=mean(Longitude), Latitude=mean(Latitude))
+  
+unique(borderF$Port.Name)
+
+
+leaflet_border = leaflet() %>% 
+  addTiles() %>% 
+  addCircles(~Longitude, ~Latitude)
+
+
+colnames(borderF)
+
+bNorthD=borderF %>% 
+  group_by(State, Measure) %>% 
+  filter(State == "North Dakota") %>%
+  ggplot(aes(x=Measure)) + geom_bar(fill ='light blue') + 
+  labs(title="Modes of Transportation by Different States",x="Modes of Transportation", y="Count") + 
+  theme(axis.text.x=element_text(angle=90))
+
+bNorthD$Measure
+
+bTexas=borderF %>% 
+  filter(State == "Texas") %>%
+  select(State, Measure, Value) %>% 
+  group_by(State, Measure) %>%
+  mutate(MeasureSum = sum(Value))
+
+borderF %>% 
+  filter(State=="North Dakota")
+         
+bTexas$MeasureSum
+         
 

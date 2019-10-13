@@ -7,4 +7,5 @@ library(plotly)
 borderF <- read.csv(file="./borderF.csv")
 rownames(borderF) <- NULL
 choice <- colnames(borderF)
-port_choice <-colnames(borderF$Port.Name)
+border_choice <- unique(borderF$Border)
+measure_choice <- unique(borderF$Measure)
