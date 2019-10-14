@@ -25,7 +25,7 @@ shinyServer(function(input, output,session) {
   output$plot1 <- renderPlot(
     borderF %>% 
       group_by(Border) %>% 
-      summarise(NumberPort = n_distinct(Port.Name)) %>% 
+      summarise(NumberPort = dplyr::n_distinct(Port.Name)) %>% 
       ggplot(aes(Border, NumberPort)) + geom_col(fill='light pink') + 
       labs(x="Border", y="Number of Port") + 
       theme(axis.text=element_text(size=12),

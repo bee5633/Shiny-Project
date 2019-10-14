@@ -1,11 +1,12 @@
 library(shiny)
 library(shinydashboard)
 library(DT)
-library(googleVis)
 library(data.table)
 library(plotly)
+library(leaflet)
 borderF <- read.csv(file="./borderF.csv")
 rownames(borderF) <- NULL
 choice <- colnames(borderF)
 border_choice <- unique(borderF$Border)
 measure_choice <- unique(borderF$Measure)
+state_choice <- unique(borderF$State)
