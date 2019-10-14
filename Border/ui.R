@@ -9,32 +9,19 @@ ui <- dashboardPage( skin = "yellow",
     dashboardSidebar(
       sidebarUserPanel(name = " Bee Kim", image = "bee.jpg"),
       sidebarMenu(
-        menuItem("Introduction", tabName ="aboutdata",icon = icon("info")),
         menuItem("Border Ports", tabName = "borderport", icon=icon("map")),
         menuItem("Modes of Transportation", tabName="measure", icon = icon("car-side")),
         menuItem("States",tabName="chart2", icon=icon("flag")),
         menuItem("Trend by Year",tabName= "chart3",icon = icon("chart-line")),
         menuItem("Trend by Month", tabName= "chart4", icon=icon("chart-line")),
         menuItem("Data",tabName = "data",icon = icon("database")),
-        menuItem("About Me", tabName="me", icon=icon("user-alt")))
+        menuItem("About", tabName="me", icon=icon("info")))
     ),
     
-    #menuSubItem("Border Map",tabName = "map", icon=icon("map")),
-    #menuSubItem("By Border", tabName = "chart1")),
     
-    
-    
-    #Body1 : About the Data ####
+    #Body1 : About the Border ####
     dashboardBody(
       tabItems(
-        tabItem(tabName="aboutdata",
-                fluidPage(
-                  h1("About Data"),
-                  h5("This dataset is about Border Entry.")
-                  )),
-        
-        
-    #Body2 : Border Ports ####
         tabItem(tabName="borderport",
                 fluidRow(
                   tabsetPanel(
@@ -64,7 +51,7 @@ ui <- dashboardPage( skin = "yellow",
     
     
     
-    #Body3 : Different Ways of Border Entry ####
+    #Body2 : Different Ways of Border Entry ####
         tabItem(tabName="measure", 
                 fluidPage(
                   h1("By Modes of Transportation"),
@@ -77,7 +64,7 @@ ui <- dashboardPage( skin = "yellow",
                     title = "Transportation Comparison by Border",
                     plotOutput("plotMeasure", height = 550))
                 )),
-    #Body4 : By State Information ####  
+    #Body3 : By State Information ####  
         tabItem(tabName="chart2", 
                 fluidPage(
                   h1("By State"),
@@ -90,7 +77,7 @@ ui <- dashboardPage( skin = "yellow",
                     title="Measures by States",
                     plotOutput("plot2", height =550))
                   )),
-    #Body5 : By Year ####
+    #Body4 : By Year ####
         tabItem(tabName = "chart3",
                 fluidPage(
                   h1("By Year"),
@@ -102,7 +89,7 @@ ui <- dashboardPage( skin = "yellow",
                   box(width=12, title="Change Over Years",
                       solidHeader = TRUE,
                       plotOutput("plot3",height = 500)))),
-    #Body6 : By Month ####
+    #Body5 : By Month ####
         tabItem(tabName = "chart4", 
                 fluidPage(
                   h1("By Month"),
@@ -115,17 +102,28 @@ ui <- dashboardPage( skin = "yellow",
                       solidHeader =TRUE,
                       plotOutput("plot4", height = 500))
         )),
-    #Body7 : Show the Data ####
+    #Body6 : Show the Data ####
         tabItem(tabName = "data",
                 fluidPage(
                   h1("Data"),
                   box(selectizeInput("selected", "Select item to display:", choice)),
                   box(DT::dataTableOutput("table"),
                       width=12))),
-    #Body8 : About me ####
+    #Body7 : About ####
          tabItem(tabName="me", 
-                fluidRow(box(width=12,
-                        h1("Hello"),
-                        "This is me."
-               )))))
-)
+                fluidPage(
+                        h1("About Data"),
+                        h4("This data visualization project was done based on the Bureau of Transportation Statistics (BTS) Border Crossing Data.", br(),
+                        "Data are collected at U.S.-Canada and U.S.-Mexico border at the port level for the inbound crossings by U.S. Customs and Border Protection (CBP).", br(),
+                        "Data include the number of vehicles, containers, passengers and pedestrians along with type of transportation such as trucks, trains, buses and personal vehicles.", br(),
+                        "Most data are available from 1994 and new data are being constantly added after the review from BTS.", br(),
+                        "The data can be accessed with the link below.", br()),
+                        uiOutput("tab"),
+                        br(),
+                        br(),
+                        h1("About Me"),
+                        h4("Bee Kim is a currently studying at NYC Data Science Academy as a fellow to follow her passion.", br(),
+                        "She holds a MS degree in Information Systems with concentration in data analysis from NJIT and BS degree in Clinical Laboratory Science from SUNY Stony Brook.", br(),
+                        "If you want to follow her work in data science, please check the GitHub link above the Dashboard!")
+               )))
+))
