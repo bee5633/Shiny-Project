@@ -16,8 +16,8 @@ The original dataset of 40MB includes 349,000 rows with 7 columns, classified as
 <b> R packages used </b> \
 dplyr: to clean the data
   Boder Name changed : "U.S.-Canada Border" -> "Canada", "U.S.-Mexico Border" -> "Mexico"
-  Location divided in two sections : Longitude and Latitude
-ggplot2 and leaflet : EDA
+  Location divided in two sections : Longitude and Latitude \
+ggplot2 and leaflet : EDA \
 shiny : dashboard for presentation
 
 <b> Analysis </b> \
