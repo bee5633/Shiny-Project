@@ -14,8 +14,8 @@ The original dataset of 40MB includes 349,000 rows with 7 columns, classified as
  -note : important to be aware that this dataset doesn't count the number of unique vehicles, passengers or pedestrians but rather the number of crossing. Meaning, the same truck can go back and forth across the border several times a day and data for each time will be collected. 
 
 <b> R packages used </b> \
-dplyr: to clean the data
-  Boder Name changed : "U.S.-Canada Border" -> "Canada", "U.S.-Mexico Border" -> "Mexico"
+dplyr: to clean the data \
+  Boder Name changed : "U.S.-Canada Border" -> "Canada", "U.S.-Mexico Border" -> "Mexico"\
   Location divided in two sections : Longitude and Latitude \
 ggplot2 and leaflet : EDA \
 shiny : dashboard for presentation
